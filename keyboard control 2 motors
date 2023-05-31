@@ -1,0 +1,79 @@
+#include <AccelStepper.h>
+
+// Define motor pins
+#define motor1DirPin 2
+#define motor1StepPin 3
+#define motor2DirPin 4
+#define motor2StepPin 5
+
+// Define motor steps per revolution
+const float stepsPerRevolution = 200;
+
+// Create AccelStepper objects for each motor
+AccelStepper motor1(AccelStepper::DRIVER, motor1StepPin, motor1DirPin);
+AccelStepper motor2(AccelStepper::DRIVER, motor2StepPin, motor2DirPin);
+
+void setup() {
+  // Set motor speed and acceleration
+  motor1.setMaxSpeed(2000);
+  motor1.setAcceleration(1000);
+  motor2.setMaxSpeed(2000);
+  motor2.setAcceleration(1000);
+
+  // Initialize serial communication
+  Serial.begin(9600);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char command = Serial.read();
+    
+    // Motor 1 control
+    if (command == 'A') {
+      moveMotor1Forward();
+    } else if (command == 'a') {
+      moveMotor1Backward();
+    } else if (command == '0') {
+      stopMotor1();
+    }
+    
+    // Motor 2 control
+    if (command == 'B') {
+      moveMotor2Forward();
+    } else if (command == 'b') {
+      moveMotor2Backward();
+    } else if (command == '1') {
+      stopMotor2();
+    }
+  }
+}
+
+// Motor 1 control functions
+void moveMotor1Forward() {
+  motor1.moveTo(1000); // Move to a specific position
+  motor1.runToPosition(); // Run to the desired position
+}
+
+void moveMotor1Backward() {
+  motor1.moveTo(-1000); // Move to a specific position
+  motor1.runToPosition(); // Run to the desired position
+}
+
+void stopMotor1() {
+  motor1.stop();
+}
+
+// Motor 2 control functions
+void moveMotor2Forward() {
+  motor2.moveTo(2000); // Move to a specific position
+  motor2.runToPosition(); // Run to the desired position
+}
+
+void moveMotor2Backward() {
+  motor2.moveTo(-2000); // Move to a specific position
+  motor2.runToPosition(); // Run to the desired position
+}
+
+void stopMotor2() {
+  motor2.stop();
+}
