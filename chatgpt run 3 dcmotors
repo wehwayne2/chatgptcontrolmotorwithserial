@@ -1,0 +1,78 @@
+#include <AccelStepper.h>
+
+// Define stepper motor connections
+#define STEP_PIN_1 3
+#define DIR_PIN_1 2
+#define STEP_PIN_2 5
+#define DIR_PIN_2 4
+#define STEP_PIN_3 7
+#define DIR_PIN_3 6
+
+// Create instances of AccelStepper for each motor
+AccelStepper stepper1(AccelStepper::DRIVER, STEP_PIN_1, DIR_PIN_1);
+AccelStepper stepper2(AccelStepper::DRIVER, STEP_PIN_2, DIR_PIN_2);
+AccelStepper stepper3(AccelStepper::DRIVER, STEP_PIN_3, DIR_PIN_3);
+
+void setup() {
+  // Set the maximum speed and acceleration for each stepper motor
+  stepper1.setMaxSpeed(2000);
+  stepper1.setAcceleration(1000);
+  stepper2.setMaxSpeed(2000);
+  stepper2.setAcceleration(1000);
+  stepper3.setMaxSpeed(2000);
+  stepper3.setAcceleration(1000);
+
+  // Set the direction pins as outputs
+  pinMode(DIR_PIN_1, OUTPUT);
+  pinMode(DIR_PIN_2, OUTPUT);
+  pinMode(DIR_PIN_3, OUTPUT);
+
+  // Set the initial direction of each stepper motor
+  digitalWrite(DIR_PIN_1, HIGH); // Set HIGH for clockwise rotation, LOW for counterclockwise rotation
+  digitalWrite(DIR_PIN_2, HIGH);
+  digitalWrite(DIR_PIN_3, HIGH);
+}
+
+void loop() {
+  // Move stepper motor 1 one full revolution clockwise
+  stepper1.move(200 * 16); // 200 steps per revolution, 16 microsteps per step
+  stepper1.runToPosition();
+
+  // Delay for 1 second
+  delay(1000);
+
+  // Move stepper motor 1 one full revolution counterclockwise
+  stepper1.move(-200 * 16);
+  stepper1.runToPosition();
+
+  // Delay for 1 second
+  delay(1000);
+
+  // Move stepper motor 2 one full revolution clockwise
+  stepper2.move(200 * 16);
+  stepper2.runToPosition();
+
+  // Delay for 1 second
+  delay(1000);
+
+  // Move stepper motor 2 one full revolution counterclockwise
+  stepper2.move(-200 * 16);
+  stepper2.runToPosition();
+
+  // Delay for 1 second
+  delay(1000);
+
+  // Move stepper motor 3 one full revolution clockwise
+  stepper3.move(200 * 16);
+  stepper3.runToPosition();
+
+  // Delay for 1 second
+  delay(1000);
+
+  // Move stepper motor 3 one full revolution counterclockwise
+  stepper3.move(-200 * 16);
+  stepper3.runToPosition();
+
+  // Delay for 1 second
+  delay(1000);
+}
