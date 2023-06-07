@@ -1,0 +1,75 @@
+#include <AccelStepper.h>
+
+// Define stepper motor connections
+#define STEP_PIN_1 3
+#define DIR_PIN_1 2
+#define STEP_PIN_2 5
+#define DIR_PIN_2 4
+#define STEP_PIN_3 7
+#define DIR_PIN_3 6
+
+// Create instances of AccelStepper for each motor
+AccelStepper stepper1(AccelStepper::DRIVER, STEP_PIN_1, DIR_PIN_1);
+AccelStepper stepper2(AccelStepper::DRIVER, STEP_PIN_2, DIR_PIN_2);
+AccelStepper stepper3(AccelStepper::DRIVER, STEP_PIN_3, DIR_PIN_3);
+
+// Variables to store the target speed for each motor
+float targetSpeed1 = 0.0;
+float targetSpeed2 = 0.0;
+float targetSpeed3 = 0.0;
+
+void setup() {
+  // Set the maximum speed and acceleration for each stepper motor
+  stepper1.setMaxSpeed(2000);
+  stepper1.setAcceleration(1000);
+  stepper2.setMaxSpeed(2000);
+  stepper2.setAcceleration(1000);
+  stepper3.setMaxSpeed(2000);
+  stepper3.setAcceleration(1000);
+
+  // Set the direction pins as outputs
+  pinMode(DIR_PIN_1, OUTPUT);
+  pinMode(DIR_PIN_2, OUTPUT);
+  pinMode(DIR_PIN_3, OUTPUT);
+
+  // Set the initial direction of each stepper motor
+  digitalWrite(DIR_PIN_1, HIGH); // Set HIGH for clockwise rotation, LOW for counterclockwise rotation
+  digitalWrite(DIR_PIN_2, HIGH);
+  digitalWrite(DIR_PIN_3, HIGH);
+
+  // Initialize Serial communication
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Check if there is any incoming data from the Serial port
+  if (Serial.available() > 0) {
+    // Read the incoming data
+    String input = Serial.readStringUntil('\n');
+    input.trim();
+
+    // Split the input string into three values separated by spaces
+    int spaceIndex1 = input.indexOf(' ');
+    int spaceIndex2 = input.lastIndexOf(' ');
+
+    // Extract the three values from the input string
+    String speed1String = input.substring(0, spaceIndex1);
+    String speed2String = input.substring(spaceIndex1 + 1, spaceIndex2);
+    String speed3String = input.substring(spaceIndex2 + 1);
+
+    // Convert the extracted values to floats
+    targetSpeed1 = speed1String.toFloat();
+    targetSpeed2 = speed2String.toFloat();
+    targetSpeed3 = speed3String.toFloat();
+  }
+
+  // Set the speed of each stepper motor
+  stepper1.setSpeed(targetSpeed1);
+  stepper2.setSpeed(targetSpeed2);
+  stepper3.setSpeed(targetSpeed3);
+
+  // Move each stepper motor one step
+  stepper1.runSpeed();
+  stepper2.runSpeed();
+  stepper3.runSpeed();
+}
